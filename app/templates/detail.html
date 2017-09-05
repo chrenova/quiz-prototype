@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<html>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+function onSuccess(data) {
+//    alert(data);
+//    $("#main").text(data.status);
+    $("#main").html(data);
+}
+function getInfo(token) {
+    $.ajax({
+        type: "GET",
+        url: "/quiz/detail/" + token,
+//        data: JSON.stringify({}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: onSuccess,
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
+}
+function nextQuestion(token) {
+    $.ajax({
+        type: "POST",
+        url: "/quiz/next/" + token,
+//        data: JSON.stringify({}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: onSuccess,
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
+}
+function submitAnswer(token) {
+    clearInterval(counter);
+    $.ajax({
+        type: "POST",
+        url: "/quiz/submit/" + token,
+//        data: JSON.stringify({}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "html",
+        success: onSuccess,
+        failure: function(errMsg) {
+            alert(errMsg);
+        }
+    });
+}
+function timer()
+{
+  count=count-1;
+  if (count <= 0)
+  {
+     clearInterval(counter);
+     submitAnswer({{quiz.token}});
+     return;
+  }
+  $("#timer").text(count);
+}
+</script>
+<body>
+<h1>quizdom</h1>
+<div id="main"></div>
+</body>
+<script>
+$( document ).ready(function() {
+    console.log( "ready!" );
+    getInfo({{quiz.token}});
+});
+</script>
+</html>

@@ -1,0 +1,21 @@
+<h4>{{quiz.token}}</h4>
+{% if not quiz.current_question %}
+<button onclick="nextQuestion({{quiz.token}})">Start</button>
+{% else %}
+{{quiz}}
+<p>Question: {{quiz.current_question.text}}</p>
+<p>
+    {% if quiz.current_question.expired or quiz.current_question.answer %}
+        <p>Your answer: {{quiz.current_question.answer}}</p>
+        <button onclick="nextQuestion({{quiz.token}})">Next</button>
+    {% else %}
+        <input type="radio"/>
+        <button onclick="submitAnswer({{quiz.token}})">Submit</button>
+        <span id="timer"></span>
+        <script>
+            var count={{quiz.current_question.seconds_to_expire}};
+            var counter=setInterval(timer, 1000);
+        </script>
+    {% endif %}
+</p>
+{% endif %}
